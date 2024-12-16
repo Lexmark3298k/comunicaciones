@@ -1,0 +1,216 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 16-12-2024 a las 03:35:11
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 8.2.0
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `comunicaciones`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `c_ingresos`
+--
+
+CREATE TABLE `c_ingresos` (
+  `id` int(11) NOT NULL,
+  `nro_cedula` varchar(20) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `fecha_recep` datetime NOT NULL,
+  `fecha_devolucion` datetime DEFAULT NULL,
+  `observaciones` varchar(250) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `c_ingresos`
+--
+
+INSERT INTO `c_ingresos` (`id`, `nro_cedula`, `id_usuario`, `fecha_recep`, `fecha_devolucion`, `observaciones`) VALUES
+(1, '7414424545114', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(2, '42024543499202307540', 2, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(3, '7414424545111', 3, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(4, '42024543499202307549', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(5, '7414424545112', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(6, '42024543499202307540', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(7, '7414424545113', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(8, '42024543499202307541', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(9, '123456789', 1, '2024-12-14 22:45:00', '2024-12-14 16:46:00', 'TEST INGRESO CEDULA SIN USUARIO Y FECHA X DEFECTO'),
+(10, '7414424545114', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(11, '42024543499202307540', 2, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(12, '7414424545111', 3, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(13, '42024543499202307549', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(14, '7414424545112', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(15, '42024543499202307540', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(16, '7414424545113', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(17, '42024543499202307541', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(18, '123456789', 1, '2024-12-14 22:45:00', '2024-12-14 16:46:00', 'TEST INGRESO CEDULA SIN USUARIO Y FECHA X DEFECTO'),
+(19, '7414424545114', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(20, '42024543499202307540', 2, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(21, '7414424545111', 3, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(22, '42024543499202307549', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(23, '7414424545112', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(24, '42024543499202307540', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(25, '7414424545113', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(26, '42024543499202307541', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(27, '123456789', 1, '2024-12-14 22:45:00', '2024-12-14 16:46:00', 'TEST INGRESO CEDULA SIN USUARIO Y FECHA X DEFECTO'),
+(28, '7414424545114', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(29, '42024543499202307540', 2, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(30, '7414424545111', 3, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(31, '42024543499202307549', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(32, '7414424545112', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(33, '42024543499202307540', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(34, '7414424545113', 1, '2024-12-12 15:51:00', '2024-12-12 15:52:00', 'TEST'),
+(35, '42024543499202307541', 1, '2024-12-12 15:58:00', '2024-12-12 15:58:00', 'TEST'),
+(36, '12345678910', 1, '2024-12-14 22:45:00', '2024-12-14 16:46:00', 'TEST INGRESO CEDULA SIN USUARIO Y FECHA X DEFECTO'),
+(37, '2222222', 2, '2024-12-15 01:05:00', NULL, 'TEST'),
+(38, '33333', 2, '2024-12-15 01:09:00', NULL, 'test'),
+(39, '44444', 2, '2024-12-15 01:12:00', NULL, 'test mostrar alerta'),
+(40, '5555', 2, '2024-12-15 01:18:00', NULL, 'test');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `c_recepcion`
+--
+
+CREATE TABLE `c_recepcion` (
+  `id` int(11) NOT NULL,
+  `nro_cedula` varchar(20) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `fecha_devolucion` datetime DEFAULT NULL,
+  `observaciones` varchar(250) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `c_recepcion`
+--
+
+INSERT INTO `c_recepcion` (`id`, `nro_cedula`, `id_usuario`, `fecha_devolucion`, `observaciones`) VALUES
+(1, '7414424545114', 1, '2024-12-12 15:52:00', 'TEST'),
+(2, '42024543499202307540', 2, '2024-12-12 15:58:00', 'TEST'),
+(3, '7414424545111', 3, '2024-12-12 15:52:00', 'TEST'),
+(4, '42024543499202307549', 1, '2024-12-12 15:58:00', 'TEST'),
+(5, '7414424545112', 1, '2024-12-12 15:52:00', 'TEST'),
+(6, '42024543499202307540', 1, '2024-12-12 15:58:00', 'TEST'),
+(7, '7414424545113', 1, '2024-12-12 15:52:00', 'TEST'),
+(8, '42024543499202307541', 1, '2024-12-12 15:58:00', 'TEST'),
+(9, '123456789', 1, '2024-12-14 16:46:00', 'TEST INGRESO CEDULA SIN USUARIO Y FECHA X DEFECTO'),
+(10, '7414424545114', 1, '2024-12-12 15:52:00', 'TEST'),
+(11, '42024543499202307540', 2, '2024-12-12 15:58:00', 'TEST'),
+(12, '7414424545111', 3, '2024-12-12 15:52:00', 'TEST'),
+(13, '42024543499202307549', 1, '2024-12-12 15:58:00', 'TEST'),
+(14, '7414424545112', 1, '2024-12-12 15:52:00', 'TEST'),
+(15, '42024543499202307540', 1, '2024-12-12 15:58:00', 'TEST'),
+(16, '7414424545113', 1, '2024-12-12 15:52:00', 'TEST'),
+(17, '42024543499202307541', 1, '2024-12-12 15:58:00', 'TEST'),
+(18, '123456789', 1, '2024-12-14 16:46:00', 'TEST INGRESO CEDULA SIN USUARIO Y FECHA X DEFECTO'),
+(19, '7414424545114', 1, '2024-12-12 15:52:00', 'TEST'),
+(20, '42024543499202307540', 2, '2024-12-12 15:58:00', 'TEST'),
+(21, '7414424545111', 3, '2024-12-12 15:52:00', 'TEST'),
+(22, '42024543499202307549', 1, '2024-12-12 15:58:00', 'TEST'),
+(23, '7414424545112', 1, '2024-12-12 15:52:00', 'TEST'),
+(24, '42024543499202307540', 1, '2024-12-12 15:58:00', 'TEST'),
+(25, '7414424545113', 1, '2024-12-12 15:52:00', 'TEST'),
+(26, '42024543499202307541', 1, '2024-12-12 15:58:00', 'TEST'),
+(27, '123456789', 1, '2024-12-14 16:46:00', 'TEST INGRESO CEDULA SIN USUARIO Y FECHA X DEFECTO'),
+(28, '7414424545114', 1, '2024-12-12 15:52:00', 'TEST'),
+(29, '42024543499202307540', 2, '2024-12-12 15:58:00', 'TEST'),
+(30, '7414424545111', 3, '2024-12-12 15:52:00', 'TEST'),
+(31, '42024543499202307549', 1, '2024-12-12 15:58:00', 'TEST'),
+(32, '7414424545112', 1, '2024-12-12 15:52:00', 'TEST'),
+(33, '42024543499202307540', 1, '2024-12-12 15:58:00', 'TEST'),
+(34, '7414424545113', 1, '2024-12-12 15:52:00', 'TEST'),
+(35, '42024543499202307541', 1, '2024-12-12 15:58:00', 'TEST'),
+(36, '12345678910', 1, '2024-12-14 16:46:00', 'TEST INGRESO CEDULA SIN USUARIO Y FECHA X DEFECTO'),
+(37, '11111111', 2, '2024-12-15 01:22:00', 'recepcionada'),
+(38, '2222222', 2, '2024-12-15 01:25:00', 'recepcion');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`id`, `username`, `password`, `email`) VALUES
+(1, 'gfloresr', '$2y$10$NXM6kCfTB6M7F2dFQUG1guijYtGJGZ3PYgz0jTezmHwH/vZmw96ZC', 'correo@pj.gob.pe'),
+(2, 'administrador', '$2y$10$NXM6kCfTB6M7F2dFQUG1guijYtGJGZ3PYgz0jTezmHwH/vZmw96ZC', 'correo@pj.gob.pe'),
+(3, 'admin', '$2y$10$NXM6kCfTB6M7F2dFQUG1guijYtGJGZ3PYgz0jTezmHwH/vZmw96ZC', 'admin@admin.com');
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `c_ingresos`
+--
+ALTER TABLE `c_ingresos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_nro_cedula` (`nro_cedula`),
+  ADD KEY `idx_id_usuario` (`id_usuario`);
+
+--
+-- Indices de la tabla `c_recepcion`
+--
+ALTER TABLE `c_recepcion`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_nro_cedula` (`nro_cedula`),
+  ADD KEY `idx_id_usuario` (`id_usuario`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `c_ingresos`
+--
+ALTER TABLE `c_ingresos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT de la tabla `c_recepcion`
+--
+ALTER TABLE `c_recepcion`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
