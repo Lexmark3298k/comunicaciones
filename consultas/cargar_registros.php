@@ -1,7 +1,7 @@
 <?php
 //archivo cargar_registros.php
 // Conexión a la base de datos
-include_once 'conexion.php';
+include_once '../conexion.php';
 
 // Obtener el término de búsqueda y la página actual
 $query = isset($_GET['q']) ? trim($_GET['q']) : '';
@@ -25,9 +25,22 @@ $total_records = $result_count->fetch_assoc()['total'];
 $total_pages = ceil($total_records / $limit);
 
 // Consultar los registros que coincidan con la búsqueda y aplicar el límite y el offset
-$sql = "SELECT id, nro_cedula, id_usuario, fecha_recep, fecha_devolucion, observaciones
-        FROM c_ingresos
-        WHERE nro_cedula LIKE ? OR id_usuario LIKE ?
+$sql = " SELECT 
+        c_ingresos.id AS id_ingreso,
+        c_ingresos.nro_cedula,
+        c_ingresos.id_usuario AS id_usuario_ingreso,
+        c_ingresos.fecha_recep,
+        c_recepcion.id AS id_recepcion,
+        c_recepcion.id_usuario AS id_usuario_recepcion,
+        c_recepcion.fecha_devolucion,
+        c_recepcion.observaciones
+    FROM 
+        c_ingresos
+    LEFT JOIN 
+        c_recepcion 
+    ON 
+        c_ingresos.nro_cedula = c_recepcion.nro_cedula
+        WHERE c_ingresos.nro_cedula LIKE ? OR c_ingresos.id_usuario LIKE ?
         LIMIT ? OFFSET ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ssii", $searchTerm, $searchTerm, $limit, $offset);
@@ -38,10 +51,12 @@ if ($result->num_rows > 0) {
     // Mostrar los registros en una tabla HTML
     while ($row = $result->fetch_assoc()) {
         echo "<tr>
-                <td>" . $row["id"] . "</td>
+                <td>" . $row["id_ingreso"] . "</td>
                 <td>" . $row["nro_cedula"] . "</td>
-                <td>" . $row["id_usuario"] . "</td>
-                <td>" . $row["fecha_recep"] . "</td>
+                <td>" . $row["id_usuario_ingreso"] . "</td>
+				<td>" . $row["fecha_recep"] . "</td>
+				<td>" . $row["id_recepcion"] . "</td>
+                <td>" . $row["id_usuario_recepcion"] . "</td>
                 <td>" . $row["fecha_devolucion"] . "</td>
                 <td>" . $row["observaciones"] . "</td>
             </tr>";
