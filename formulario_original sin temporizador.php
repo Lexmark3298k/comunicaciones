@@ -4,6 +4,23 @@ session_start();
 date_default_timezone_set('America/Lima');
 $ip_address = $_SERVER['REMOTE_ADDR'];
 
+// Configurar el tiempo de expiración de la sesión 
+$tiempo_limite_sesion = 900; // 15 minutos en segundos 
+// Verificar si existe la variable de sesión 'ultimo_acceso' 
+if (isset($_SESSION['ultimo_acceso'])) {
+	$tiempo_transcurrido = time() - $_SESSION['ultimo_acceso'];
+	// Verificar si el tiempo transcurrido excede el tiempo límite 
+	if ($tiempo_transcurrido > $tiempo_limite_sesion) { 
+	// Destruir la sesión y redirigir al usuario a la página de login 
+	session_unset(); 
+	session_destroy(); 
+	header("Location: login.php"); 
+	exit(); 
+	}
+	} 
+	// Actualizar la hora del último acceso 
+	$_SESSION['ultimo_acceso'] = time();
+
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Si no está logueado, redirigir al login
@@ -16,7 +33,7 @@ if (!isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="estilos.css" rel="stylesheet" type="text/css">
-    <title>Recepción de Cédulas</title>
+    <title>Registro de Cedulas</title>
 </head>
 <body>
     <header>
@@ -26,23 +43,24 @@ if (!isset($_SESSION['user_id'])) {
         <div class="header-right">
             <a href="cerrar_sesion.php">Cerrar sesión</a>
         </div>
+		<div class="session-timer"> Tiempo restante de la sesión: <span id="tiempo-restante"></span> </div>
     </header>
     <div class="main-container">
         <nav class="sidebar">
             <ul>
-                <li><a href="index.php">Ver registros</a></li>
+				<li><a href="index.php">Ver registros</a></li>
                 <li><a href="formulario.php">Ingresar Cédulas</a></li>
                 <li><a href="recepcionar_cedulas.php">Recepcionar Cédulas</a></li>
-                <li><a href="ver_registros.php">Ver registros</a></li>
+				<li><a href="ver_registros.php">Ver registros</a></li>
                 <li><a href="crear_usuario.php">Mantenimiento</a></li>
-                <li><a href="reportes.php">Reportes</a></li>
+				<li><a href="reportes.php">Reportes</a></li>
                 <li><a href="exportar.php">Exportar</a></li>
                 <li><a href="importar.php">Importar</a></li>
             </ul>
         </nav>
         <div class="content">
-            <h2>Formulario de Recepción de Cédulas - Comunicaciones</h2>
-            
+            <h2>Recepción de Cédulas de Notificación / Físicas</h2>
+
             <?php
             if (isset($_SESSION['message'])) {
                 $message_type = $_SESSION['message_type'] == "success" ? "alert-success" : "alert-error";
@@ -51,38 +69,32 @@ if (!isset($_SESSION['user_id'])) {
                 unset($_SESSION['message_type']);
             }
             ?>
-            
-            <form id="registro" action="procesar_recepcionar.php" method="POST">
-                <label for="nro_cedula">Código de Barras</label>
-                <input type="text" name="nro_cedula" id="nro_cedula" oninput="validateInput(event)" required maxlength="20" title="Solo se permiten hasta 20 caracteres numéricos"><br><br>
+
+            <form id="registro" action="procesar_formulario.php" method="POST">
+                <label for="nro_cedula">Codigo Único</label>
+                <input autofocus type="number"  maxlength="20" name="nro_cedula" id="nro_cedula"  oninput="multiFunction()"  required><br><br>
 
                 <!-- Campo oculto para ID de Usuario -->
                 <input type="hidden" name="id_usuario" id="id_usuario" value="<?php echo $_SESSION['user_id']; ?>">
-                
-                <!-- Campo oculto para búsqueda por cédula -->
-                <label for="cedula">Nro de Cédula</label>
-                <input type="text" name="cedula" id="cedula" readonly><br><br>            
+				
+				<!-- Campo oculto para busqueda por cedula -->
+				<label for="anio">Nro de Cédula</label>
+                <input type="text" name="cedula" id="cedula" readonly>	<br><br>			
 
-                <!-- Campo oculto para búsqueda por año -->
-                <label for="anio">Año</label>
+				<!-- Campo oculto para busqueda por anio -->
+				    <label for="anio">Año</label>
                 <input type="text" name="anio" id="anio" readonly><br><br>
 
-                <!-- Campo oculto para Fecha de Devolución con la fecha y hora del sistema -->
-                <input type="hidden" name="fecha_devolucion" id="fecha_devolucion" value="<?php echo date('Y-m-d\TH:i'); ?>">
-                
-                <label for="observaciones">Observaciones:</label><br>
+                <!-- Campo oculto para Fecha de Recepción con la fecha y hora del sistema -->
+                <input type="hidden" name="fecha_recep" id="fecha_recep" value="<?php echo date('Y-m-d\TH:i'); ?>">
+				
+				  <label for="observaciones">Observaciones:</label><br>
                 <textarea name="observaciones" id="observaciones" rows="4" cols="50"></textarea><br><br>
-                
-                <!-- Campo oculto para ip address -->
+				
+					<!-- Campo oculto para ip address -->
+				  <!-- <label for="ipaddress">Ipaddress:</label><br>-->
                 <input type="hidden" name="ipaddress" id="ipaddress" readonly value="<?php echo $ip_address; ?>"><br><br>
 
-                <!-- Campo adicional de tipo radio --> 
-                <label for="estado">Estado:</label><br> 
-                <input type="radio" id="notificado" name="estado" value="Notificado" checked> 
-                <label for="notificado">Notificado</label><br> 
-                <input type="radio" id="motivado" name="estado" value="Motivado"> 
-                <label for="motivado">Motivado</label><br><br>
-                
                 <input type="submit" value="Enviar">
             </form>
         </div>
@@ -110,7 +122,7 @@ if (!isset($_SESSION['user_id'])) {
 	extraeranio(); 
 	</script>
 	
-	<script> function validateInput(event) {
+		<script> function validateInput(event) {
 	const input = event.target; 
 	const value = input.value; 
 	// Remover cualquier carácter que no sea un número positivo 
@@ -123,21 +135,20 @@ if (!isset($_SESSION['user_id'])) {
 		} 
 	} 
 	 </script>
-		
+	
 	<script>function multiFunction() {
     extraerYVisualizar();
     extraeranio();
 	validateInput(event);
 }
 	</script>
-	
 	<script>
 	document.getElementById('nro_cedula').addEventListener('input', function() {
     const nroCedula = this.value;
     const errorMessage = document.getElementById('error-message');
 
     if (nroCedula.length > 0) {
-        fetch(`verificar_nro_cedula_devolucion.php?nro_cedula=${nroCedula}`)
+        fetch(`verificar_nro_cedula.php?nro_cedula=${nroCedula}`)
             .then(response => response.json())
             .then(data => {
                 if (data.exists) {
@@ -154,7 +165,6 @@ if (!isset($_SESSION['user_id'])) {
     }
 });
 </script>
-
 <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const form = document.getElementById('registro');
@@ -166,7 +176,15 @@ if (!isset($_SESSION['user_id'])) {
             });
         });
     </script>
-    <footer>
+
+<script> function actualizarTiempoRestante(tiempoLimite) {
+	const tiempoRestanteElemento = document.getElementById('tiempo-restante'); let tiempoRestante = tiempoLimite; const interval = setInterval(() => { tiempoRestante--; if (tiempoRestante <= 0) { clearInterval(interval); // Redireccionar al login si el tiempo expira window.location.href = 'login.php'; } const minutos = Math.floor(tiempoRestante / 60); const segundos = tiempoRestante % 60; tiempoRestanteElemento.textContent = `${minutos}m ${segundos}s`; }, 1000); } window.onload = () => { 
+	// Configurar el tiempo de expiración inicial de la sesión desde PHP 
+	const tiempoLimite = <?php echo $tiempo_limite_sesion - (time() - $_SESSION['ultimo_acceso']); ?>; actualizarTiempoRestante(tiempoLimite); } </script>
+
+
+	<div id="error-message" style="color: red; font-weight: bold;"></div>
+        <footer>
         <p>&copy; <?php echo date("Y"); ?>  Sistemas de: Recolección de Cédulas de Notificación en Periferia, Diligenciamiento de Cédulas Físicas con Descarga en Tiempo Real, y Trazabilidad de cédulas de notificación”. Todos los derechos reservados.</p>
     </footer>
 </body>

@@ -12,7 +12,7 @@
 <body>
 
 <header>
-    <h1>Registros de Cedulas de Notificacion Fisicas</h1>
+    <h1>Cedulas Registradas/Recepcionadas</h1>
 </header>
 
 <div class="container">
@@ -22,14 +22,16 @@
     <table id="recordsTable">
         <thead>
             <tr>
-                <th>id_ingreso</th>
-                <th>nro_cedula</th>
-                <th>id_usuario_ingreso</th>
-				<th>fecha_recep</th>
-				<th>id_recepcion</th>
-                <th>id_usuario_recepcion</th>
-                <th>fecha_devolucion</th>
-                <th>observaciones</th>
+                <th><a href="#" onclick="sortRecords('id')">ID</a></th>
+                <th><a href="#" onclick="sortRecords('id')">Codigo Unico</a></th>
+				<th><a href="#" onclick="sortRecords('id')">Cedula</a></th>
+                <th><a href="#" onclick="sortRecords('id')">Usuario</a></th>
+				<th><a href="#" onclick="sortRecords('id')">F.Recepcion</a></th>
+				<!--<th>ID_R</th> -->
+                <th><a href="#" onclick="sortRecords('id')">Receptor</a></th>
+                <th><a href="#" onclick="sortRecords('id')">F.Devolucion</a></th>
+               <!--<th>OBS</th> -->
+				<th><a href="#" onclick="sortRecords('id')">Estado</a></th>
             </tr>
         </thead>
         <tbody>
@@ -42,7 +44,12 @@
     </div>
 </div>
 
-<script src="../loadrecords.js"></script>
-
+<script src="loadrecords.js"></script>
+<script src="sortRecords.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    loadRecords();
+});
+</script>
 </body>
 </html>

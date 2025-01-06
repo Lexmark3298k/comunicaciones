@@ -16,7 +16,7 @@ if (!isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="estilos.css" rel="stylesheet" type="text/css">
-    <title>Recepción de Cédulas</title>
+    <title>Recepcion de Cedulas</title>
 </head>
 <body>
     <header>
@@ -30,20 +30,20 @@ if (!isset($_SESSION['user_id'])) {
     <div class="main-container">
         <nav class="sidebar">
             <ul>
-                <li><a href="index.php">Ver registros</a></li>
+				<li><a href="index.php">Ver registros</a></li>
                 <li><a href="formulario.php">Ingresar Cédulas</a></li>
                 <li><a href="recepcionar_cedulas.php">Recepcionar Cédulas</a></li>
-                <li><a href="ver_registros.php">Ver registros</a></li>
+				<li><a href="ver_registros.php">Ver registros</a></li>
                 <li><a href="crear_usuario.php">Mantenimiento</a></li>
-                <li><a href="reportes.php">Reportes</a></li>
+				<li><a href="reportes.php">Reportes</a></li>
                 <li><a href="exportar.php">Exportar</a></li>
                 <li><a href="importar.php">Importar</a></li>
             </ul>
         </nav>
         <div class="content">
-            <h2>Formulario de Recepción de Cédulas - Comunicaciones</h2>
-            
-            <?php
+            <h2>Formulario de Recepcion de Cedulas - Comunicaciones</h2>
+			
+			 <?php
             if (isset($_SESSION['message'])) {
                 $message_type = $_SESSION['message_type'] == "success" ? "alert-success" : "alert-error";
                 echo '<div class="alert ' . $message_type . '">' . $_SESSION['message'] . '</div>';
@@ -51,39 +51,39 @@ if (!isset($_SESSION['user_id'])) {
                 unset($_SESSION['message_type']);
             }
             ?>
-            
+			
             <form id="registro" action="procesar_recepcionar.php" method="POST">
-                <label for="nro_cedula">Código de Barras</label>
-                <input type="text" name="nro_cedula" id="nro_cedula" oninput="validateInput(event)" required maxlength="20" title="Solo se permiten hasta 20 caracteres numéricos"><br><br>
+                <label for="nro_cedula">Codigo de Barras</label>
+      <input type="number" name="nro_cedula" id="nro_cedula" oninput="multiFunction()" required maxlength="20"  title="Solo se permiten hasta 20 caracteres numéricos" ><br><br>
 
                 <!-- Campo oculto para ID de Usuario -->
                 <input type="hidden" name="id_usuario" id="id_usuario" value="<?php echo $_SESSION['user_id']; ?>">
-                
-                <!-- Campo oculto para búsqueda por cédula -->
-                <label for="cedula">Nro de Cédula</label>
-                <input type="text" name="cedula" id="cedula" readonly><br><br>            
+				
+				<!-- Campo oculto para busqueda por cedula -->
+				<label for="anio">Nro de Cédula</label>
+                <input type="text" name="cedula" id="cedula" readonly>	<br><br>			
 
-                <!-- Campo oculto para búsqueda por año -->
-                <label for="anio">Año</label>
+				<!-- Campo oculto para busqueda por anio -->
+				    <label for="anio">Anio</label>
                 <input type="text" name="anio" id="anio" readonly><br><br>
 
-                <!-- Campo oculto para Fecha de Devolución con la fecha y hora del sistema -->
+                <!-- Campo oculto para Fecha de Devolucion con la fecha y hora del sistema -->
                 <input type="hidden" name="fecha_devolucion" id="fecha_devolucion" value="<?php echo date('Y-m-d\TH:i'); ?>">
-                
-                <label for="observaciones">Observaciones:</label><br>
+				
+				  <label for="observaciones">Observaciones:</label><br>
                 <textarea name="observaciones" id="observaciones" rows="4" cols="50"></textarea><br><br>
-                
-                <!-- Campo oculto para ip address -->
+				
+					<!-- Campo oculto para ip address -->
+				 <!-- <label for="ipaddress">Ipaddress:</label><br> -->
                 <input type="hidden" name="ipaddress" id="ipaddress" readonly value="<?php echo $ip_address; ?>"><br><br>
 
-                <!-- Campo adicional de tipo radio --> 
-                <label for="estado">Estado:</label><br> 
-                <input type="radio" id="notificado" name="estado" value="Notificado" checked> 
-                <label for="notificado">Notificado</label><br> 
-                <input type="radio" id="motivado" name="estado" value="Motivado"> 
-                <label for="motivado">Motivado</label><br><br>
-                
-                <input type="submit" value="Enviar">
+		<!-- Campo adicional de tipo radio --> 
+		<label for="estado">Estado:</label><br> 
+		<input type="radio" id="notificado" name="estado" value="Notificado" checked> 
+		<label for="notificado">Notificado</label><br> 
+		<input type="radio" id="motivado" name="estado" value="Motivado"> 
+		<label for="motivado">Motivado</label><br><br>
+        <input type="submit" value="Enviar">
             </form>
         </div>
     </div>
@@ -166,8 +166,10 @@ if (!isset($_SESSION['user_id'])) {
             });
         });
     </script>
-    <footer>
-        <p>&copy; <?php echo date("Y"); ?>  Sistemas de: Recolección de Cédulas de Notificación en Periferia, Diligenciamiento de Cédulas Físicas con Descarga en Tiempo Real, y Trazabilidad de cédulas de notificación”. Todos los derechos reservados.</p>
-    </footer>
+
+
+
+	<div id="error-message" style="color: red; font-weight: bold;"></div>
+<footer> <p>&copy; <?php echo date("Y"); ?> Comunicaciones. Todos los derechos reservados.</p> </footer>
 </body>
 </html>

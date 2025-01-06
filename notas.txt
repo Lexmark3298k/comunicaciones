@@ -1,0 +1,2 @@
+modificar php ini
+session.gc_maxlifetime=900

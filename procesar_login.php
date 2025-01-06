@@ -1,6 +1,4 @@
-<?php
-// archivo: procesar_login.php
-
+<?php // archivo: procesar_login.php
 session_start();
 include_once 'conexion.php';
 
@@ -22,7 +20,9 @@ if ($result->num_rows > 0) {
         // Contraseña correcta, iniciar sesión
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
-        header("Location: formulario.php"); // Redirigir al formulario principal
+		$_SESSION['fullname'] = $user['fullname'];
+			
+        header("Location: index.php"); // Redirigir al formulario principal
         exit;
     }
 }

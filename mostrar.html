@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Extraer y Visualizar Caracteres</title>
+</head>
+<body>
+    <input type="text" id="input1" value="123456789012345678901234567890" oninput="extraerYVisualizar()">
+    <input type="text" id="resultado" readonly>
+
+    <script>
+        function extraerYVisualizar() {
+            let input1 = document.getElementById('input1').value;
+
+            let parte1 = input1.substring(15, 20); // EXTRAE(E10;16;5)
+            let parte2 = "-"; // Reemplaza $M$237 con "-"
+            let parte3 = input1.substring(11, 15); // EXTRAE(E10;12;4)
+
+            let resultado = parte1 + parte2 + parte3; // CONCATENAR(EXTRAE(E10;16;5))&"-"&CONCATENAR((EXTRAE(E10;12;4)))
+            document.getElementById('resultado').value = resultado;
+        }
+
+        // Llamar a la función inicialmente para llenar el resultado con el valor inicial de input1
+        extraerYVisualizar();
+    </script>
+</body>
+</html>

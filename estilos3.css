@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     display: flex;
@@ -63,21 +63,21 @@ header {
 }
 
 .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid transparent;
-            border-radius: 4px;
-        }
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
 .alert-success {
-            color: #3c763d;
-            background-color: #dff0d8;
-            border-color: #d6e9c6;
-        }
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
 .alert-error {
-            color: #a94442;
-            background-color: #f2dede;
-            border-color: #ebccd1;
-        }
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
 
 .content {
     flex: 1;
@@ -110,7 +110,6 @@ label {
 
 input[type="text"],
 input[type="number"],
-input[type="datetime-local"],
 textarea {
     width: 100%;
     padding: 10px;
@@ -118,7 +117,10 @@ textarea {
     border: 1px solid #ddd;
     border-radius: 4px;
 }
-.session-timer { color: white; margin-left: 20px; }
+
+input[type="radio"] {
+    margin: 5px 0;
+}
 
 input[type="submit"] {
     width: 100%;

@@ -22,12 +22,15 @@
     <table id="recordsTable">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Nro Cédula</th>
-                <th>ID Usuario</th>
-                <th>Fecha Recepción</th>
-                <th>Fecha Devolución</th>
-                <th>Observaciones</th>
+                <th><a href="#" onclick="sortRecords('id')">ID</a></th>
+                <th><a href="#" onclick="sortRecords('id')">Nro Cédula</a></th>
+                <th><a href="#" onclick="sortRecords('id')">ID Usuario</a></th>
+                <th><a href="#" onclick="sortRecords('id')">Cedula</a></th>
+				<th><a href="#" onclick="sortRecords('id')">anio</a></th>
+				<th><a href="#" onclick="sortRecords('id')">Fecha Recepción</a></th>
+				 <!-- <th>F.Devolucion</th> -->
+                <th><a href="#" onclick="sortRecords('id')">Observaciones</a></th>
+				 <!-- <th>ipaddress</th> -->	
             </tr>
         </thead>
         <tbody>
@@ -42,5 +45,24 @@
 
 <script src="loadrecords.js"></script>
 
+<script>
+let currentSort = 'id';
+let currentOrder = 'asc';
+
+function sortRecords(column) {
+    if (currentSort === column) {
+        currentOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSort = column;
+        currentOrder = 'asc';
+    }
+    loadRecords(1, currentSort, currentOrder);
+}
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    loadRecords();
+});
+</script>
 </body>
 </html>

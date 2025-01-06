@@ -1,9 +1,7 @@
 <?php
 //archivo cargar_registros.php
-include_once 'conexion.php'; // Conectar a la BD
-// Obtener los parámetros de ordenamiento
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'id';
-$order = isset($_GET['order']) && in_array(strtolower($_GET['order']), ['asc', 'desc']) ? $_GET['order'] : 'asc';
+// Conexión a la base de datos
+include_once '../conexion.php';
 
 // Obtener el término de búsqueda y la página actual
 $query = isset($_GET['q']) ? trim($_GET['q']) : '';
@@ -26,44 +24,50 @@ $result_count = $stmt_count->get_result();
 $total_records = $result_count->fetch_assoc()['total'];
 $total_pages = ceil($total_records / $limit);
 
-// Validar que la columna para ordenar sea válida
-$valid_columns = ['id', 'nro_cedula', 'fullname', 'cedula', 'anio', 'fecha_recep'];
-if (!in_array($sort, $valid_columns)) {
-    $sort = 'id'; // Valor por defecto
-}
-
-// Consultar los registros que coincidan con la búsqueda y aplicar el límite, el offset y el ordenamiento
-$sql = "SELECT c.id, c.nro_cedula, u.fullname, c.cedula, c.anio, c.fecha_recep, c.observaciones 
-        FROM c_ingresos c
-        JOIN usuarios u ON c.id_usuario = u.id
-        WHERE c.nro_cedula LIKE ? OR u.fullname LIKE ? OR c.fecha_recep LIKE ? OR c.cedula LIKE ?
-        ORDER BY $sort $order
-        LIMIT ? OFFSET ?";
+// Consultar los registros que coincidan con la búsqueda y aplicar el límite y el offset
+$sql = " SELECT 
+        c.id AS id_ingreso,
+        c.nro_cedula,
+         u1.fullname AS fullname_ingreso,
+        c.fecha_recep,
+        r.id AS id_recepcion,
+        u2.fullname AS fullname_recepcion,
+        r.fecha_devolucion,
+        r.observaciones
+	FROM 
+		c_ingresos c 
+		JOIN usuarios u1 ON c.id_usuario = u1.id 
+		RIGHT JOIN c_recepcion r ON c.nro_cedula = r.nro_cedula 
+		LEFT JOIN usuarios u2 ON r.id_usuario = u2.id 
+		WHERE c.nro_cedula LIKE ? 
+		OR u1.fullname LIKE ? 
+		OR c.fecha_recep LIKE ? 
+		OR c.cedula LIKE ? 
+		LIMIT ? OFFSET ";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ssssii", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $limit, $offset);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-    // Inicializar la numeración
+	  // Inicializar la numeración
     $numeracion = 1 + $offset;
-    
     // Mostrar los registros en una tabla HTML
     while ($row = $result->fetch_assoc()) {
         echo "<tr>
-                <td>" . $numeracion++ . "</td> <!-- Mostrar numeración automática -->
+		         <td>" . $numeracion++ . "</td> <!-- Mostrar numeración automática -->
+			<!--. $row[id_ingreso]. -->           	    
                 <td>" . $row["nro_cedula"] . "</td>
-                <td>" . $row["fullname"] . "</td> <!-- Mostrar el nombre completo del usuario -->
-                <td>" . $row["cedula"] . "</td>
-                <td>" . $row["anio"] . "</td>
-                <td>" . $row["fecha_recep"] . "</td>
-                <!-- fecha_devolucion -->
+                <td>" . $row["fullname_ingreso"] . "</td>
+				<td>" . $row["fecha_recep"] . "</td>
+				<td>" . $row["id_recepcion"] . "</td>
+                <td>" . $row["fullname_recepcion"] . "</td>
+                <td>" . $row["fecha_devolucion"] . "</td>
                 <td>" . $row["observaciones"] . "</td>
-                <!-- ipaddress -->
             </tr>";
     }
 } else {
-    echo "<tr><td colspan='7'>No se encontraron registros.</td></tr>";
+    echo "<tr><td colspan='8'>No se encontraron registros.</td></tr>";
 }
 
 // Generar el paginador

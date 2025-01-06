@@ -1,9 +1,7 @@
 <?php
 //archivo cargar_registros.php
-include_once 'conexion.php'; // Conectar a la BD
-// Obtener los parámetros de ordenamiento
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'id';
-$order = isset($_GET['order']) && in_array(strtolower($_GET['order']), ['asc', 'desc']) ? $_GET['order'] : 'asc';
+// Conexión a la base de datos
+include_once 'conexion.php';
 
 // Obtener el término de búsqueda y la página actual
 $query = isset($_GET['q']) ? trim($_GET['q']) : '';
@@ -26,44 +24,34 @@ $result_count = $stmt_count->get_result();
 $total_records = $result_count->fetch_assoc()['total'];
 $total_pages = ceil($total_records / $limit);
 
-// Validar que la columna para ordenar sea válida
-$valid_columns = ['id', 'nro_cedula', 'fullname', 'cedula', 'anio', 'fecha_recep'];
-if (!in_array($sort, $valid_columns)) {
-    $sort = 'id'; // Valor por defecto
-}
-
-// Consultar los registros que coincidan con la búsqueda y aplicar el límite, el offset y el ordenamiento
-$sql = "SELECT c.id, c.nro_cedula, u.fullname, c.cedula, c.anio, c.fecha_recep, c.observaciones 
-        FROM c_ingresos c
-        JOIN usuarios u ON c.id_usuario = u.id
-        WHERE c.nro_cedula LIKE ? OR u.fullname LIKE ? OR c.fecha_recep LIKE ? OR c.cedula LIKE ?
-        ORDER BY $sort $order
+// Consultar los registros que coincidan con la búsqueda y aplicar el límite y el offset
+$sql = "SELECT id, nro_cedula, id_usuario, cedula,anio,fecha_recep, fecha_devolucion, observaciones, ipaddress
+        FROM c_ingresos
+        WHERE nro_cedula LIKE ? OR id_usuario LIKE ? OR fecha_recep LIKE ? OR cedula LIKE ?
         LIMIT ? OFFSET ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssii", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $limit, $offset);
+$stmt->bind_param("ssssii", $searchTerm, $searchTerm, $searchTerm,$searchTerm, $limit, $offset);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-    // Inicializar la numeración
-    $numeracion = 1 + $offset;
-    
     // Mostrar los registros en una tabla HTML
     while ($row = $result->fetch_assoc()) {
+			
         echo "<tr>
-                <td>" . $numeracion++ . "</td> <!-- Mostrar numeración automática -->
+                <td>" . $row["id"] . "</td>
                 <td>" . $row["nro_cedula"] . "</td>
-                <td>" . $row["fullname"] . "</td> <!-- Mostrar el nombre completo del usuario -->
+                <td>" . $row["id_usuario"] . "</td>
                 <td>" . $row["cedula"] . "</td>
                 <td>" . $row["anio"] . "</td>
                 <td>" . $row["fecha_recep"] . "</td>
-                <!-- fecha_devolucion -->
-                <td>" . $row["observaciones"] . "</td>
-                <!-- ipaddress -->
+				<td>" . $row["fecha_devolucion"] . "</td>
+				<td>" . $row["observaciones"] . "</td>
+				<td>" . $row["ipaddress"] . "</td>
             </tr>";
     }
 } else {
-    echo "<tr><td colspan='7'>No se encontraron registros.</td></tr>";
+    echo "<tr><td colspan='9'>No se encontraron registros.</td></tr>";
 }
 
 // Generar el paginador
