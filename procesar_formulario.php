@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	    // Obtener los datos del formulario
     $nro_cedula = $_POST['nro_cedula'] ?? '';
     $id_usuario = $_POST['id_usuario'] ?? '';
+	$notificacion = $_POST['notificacion'] ?? '';
     $cedula = $_POST['cedula'] ?? '';
     $anio = $_POST['anio'] ?? '';
     $fecha_recep = $_POST['fecha_recep'] ?? '';
@@ -21,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Preparar la consulta SQL para insertar los datos en la base de datos
-    $sql_insert = "INSERT INTO c_ingresos (nro_cedula, id_usuario, cedula, anio, fecha_recep, observaciones, ipaddress) 
-                   VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql_insert = "INSERT INTO c_ingresos (nro_cedula, id_usuario, notificacion, cedula, anio, fecha_recep, observaciones, ipaddress) 
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql_insert);
 
     if (!$stmt) {
@@ -32,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $stmt->bind_param("sisssss", $nro_cedula, $id_usuario, $cedula, $anio, $fecha_recep, $observaciones, $ipaddress);
+    $stmt->bind_param("sissssss", $nro_cedula, $id_usuario,$notificacion, $cedula, $anio, $fecha_recep, $observaciones, $ipaddress);
 
     try {
         $stmt->execute();

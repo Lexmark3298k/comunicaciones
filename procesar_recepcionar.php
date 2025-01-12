@@ -7,12 +7,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener los datos del formulario
     $nro_cedula = $_POST['nro_cedula'];
     $id_usuario = $_POST['id_usuario'];
+	$notificacion = $_POST['notificacion'];
     $cedula = $_POST['cedula'];
 	$anio = $_POST['anio'];
 	$fecha_devolucion = $_POST['fecha_devolucion'];
-    $observaciones = $_POST['observaciones'];
+    //$observaciones = $_POST['observaciones'];
 	$ipaddress = $_POST['ipaddress'];
 	$estado = $_POST['estado']; // Obtener el valor del campo 'estado'
+	// Obtener el subtipo correspondiente según el estado 
+	$subtipo = null;
+	if ($estado == 'Notificado') {
+		$subtipo = $_POST['subtipoA']; 
+		} elseif ($estado == 'Motivado') { 
+		$subtipo = $_POST['subtipoB']; 
+		} else { 
+		$subtipo =  $_POST['subtipoC']; 
+		// Para la opción 'C'
+	} 
+	
 	
  //completar valores
  if (empty($nro_cedula) || empty($id_usuario)) {
@@ -23,8 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Preparar la consulta SQL para insertar los datos en la base de datos
-    $sql_insert = "INSERT INTO c_recepcion (nro_cedula, id_usuario, cedula, anio, fecha_devolucion, observaciones, ipaddress, estado) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql_insert = "INSERT INTO c_recepcion (nro_cedula, id_usuario, notificacion, cedula, anio, fecha_devolucion,  ipaddress, estado,subtipo) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 //preparar y vincular
 $stmt = $conn->prepare($sql_insert);
 
@@ -35,7 +47,7 @@ $stmt = $conn->prepare($sql_insert);
         exit;
     }
 
-    $stmt->bind_param("sissssss", $nro_cedula, $id_usuario, $cedula, $anio, $fecha_devolucion, $observaciones, $ipaddress,$estado);
+    $stmt->bind_param("sisssssss", $nro_cedula, $id_usuario, $notificacion, $cedula, $anio, $fecha_devolucion,  $ipaddress, $estado,$subtipo);
 
     try {
         $stmt->execute();

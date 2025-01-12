@@ -1,36 +1,54 @@
-<?php 
-// archivo: ver_registros.php 
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="estilos.css" rel="stylesheet" type="text/css">
     <link href="estilos2.css" rel="stylesheet" type="text/css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Ver Cedulas Registradas</title>
+    <style>
+        table {
+            width: 100%;
+            margin: 20px 0;
+        }
+        th {
+            cursor: pointer;
+        }
+        .pagination a {
+            padding: 8px 16px;
+            margin: 0 4px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 
-<header>
-    <h1>Registros de Cedulas de Notificacion Fisicas</h1>
+<header class="bg-primary text-white text-center py-4">
+    <h1>Registros de Cedulas de Notificación Físicas</h1>
 </header>
 
 <div class="container">
-    <h2>Buscar Registros:</h2>
-    <input type="text" id="search" placeholder="Buscar por número de cédula o ID de usuario..." onkeyup="searchRecords()">
+    <h2 class="my-4">Buscar Registros:</h2>
+    <input type="text" id="search" class="form-control" placeholder="Buscar por número de cédula o ID de usuario..." onkeyup="searchRecords()">
 
-    <table id="recordsTable">
+    <table class="table table-striped table-bordered" id="recordsTable">
         <thead>
             <tr>
                 <th><a href="#" onclick="sortRecords('id')">ID</a></th>
-                <th><a href="#" onclick="sortRecords('id')">Nro Cédula</a></th>
-                <th><a href="#" onclick="sortRecords('id')">ID Usuario</a></th>
-                <th><a href="#" onclick="sortRecords('id')">Cedula</a></th>
-				<th><a href="#" onclick="sortRecords('id')">anio</a></th>
-				<th><a href="#" onclick="sortRecords('id')">Fecha Recepción</a></th>
-				 <!-- <th>F.Devolucion</th> -->
-                <th><a href="#" onclick="sortRecords('id')">Observaciones</a></th>
-				 <!-- <th>ipaddress</th> -->	
+                <th><a href="#" onclick="sortRecords('nro_cedula')">Código Único</a></th>
+                <th><a href="#" onclick="sortRecords('fullname')">ID Usuario</a></th>
+                <th><a href="#" onclick="sortRecords('notificacion')">Notificación</a></th>
+                <th><a href="#" onclick="sortRecords('cedula')">Expediente</a></th>
+                <th><a href="#" onclick="sortRecords('anio')">Año</a></th>
+                <th><a href="#" onclick="sortRecords('fecha_recep')">Fecha Recepción</a></th>
+
             </tr>
         </thead>
         <tbody>
@@ -43,6 +61,7 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="loadrecords.js"></script>
 
 <script>
@@ -58,11 +77,11 @@ function sortRecords(column) {
     }
     loadRecords(1, currentSort, currentOrder);
 }
-</script>
-<script>
+
 document.addEventListener('DOMContentLoaded', () => {
     loadRecords();
 });
 </script>
+
 </body>
 </html>

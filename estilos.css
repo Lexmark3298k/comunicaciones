@@ -42,6 +42,18 @@ header {
     background-color: #333;
     padding: 20px;
     color: white;
+    transition: width 0.3s ease;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+    overflow: hidden;
+}
+
+.sidebar .sidebar-toggle {
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
 }
 
 .sidebar ul {
@@ -56,28 +68,41 @@ header {
 .sidebar ul li a {
     color: white;
     text-decoration: none;
+    display: block;
 }
 
 .sidebar ul li a:hover {
     text-decoration: underline;
 }
 
+.sidebar ul li.submenu ul {
+    display: none;
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+.sidebar ul li.submenu:hover ul {
+    display: block;
+}
+
 .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid transparent;
-            border-radius: 4px;
-        }
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
 .alert-success {
-            color: #3c763d;
-            background-color: #dff0d8;
-            border-color: #d6e9c6;
-        }
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
 .alert-error {
-            color: #a94442;
-            background-color: #f2dede;
-            border-color: #ebccd1;
-        }
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
 
 .content {
     flex: 1;
@@ -98,6 +123,15 @@ footer {
     width: 100%;
 }
 
+.form-container {
+    width: 65%; /* Puedes cambiar a 25% si prefieres */
+    margin: auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -106,6 +140,7 @@ form {
 label {
     margin-bottom: 5px;
     color: #555;
+    font-weight: bold;
 }
 
 input[type="text"],
@@ -118,6 +153,7 @@ textarea {
     border: 1px solid #ddd;
     border-radius: 4px;
 }
+
 .session-timer { color: white; margin-left: 20px; }
 
 input[type="submit"] {
@@ -134,18 +170,67 @@ input[type="submit"]:hover {
     background-color: #45a049;
 }
 
+.estado-seccion {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.estado-columna {
+    flex: 1;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.subtipos {
+    display: none;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .main-container {
         flex-direction: column;
     }
-    
+
     .sidebar {
         width: 100%;
         text-align: center;
     }
-    
-    .content {
-        margin: 10px;
-    }
+
+.content { 
+margin: 10px;
+ } .estado-seccion { 
+ flex-direction: column; 
+ } .estado-columna { 
+ margin-bottom: 20px; } 
+ .form-container {
+	 width: 75%; /* Cambia el ancho al 75% para pantallas más pequeñas */ } 
+	 }
+	 
+	 
+/* Paginación */
+.pagination {
+	
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination a {
+    padding: 8px 16px;
+    margin: 0 4px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.pagination a:hover {
+    background-color: #f1f1f1;
+}
+
+.pagination a.active {
+    background-color: #007bff;
+    color: white;
 }

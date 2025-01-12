@@ -5,7 +5,7 @@ date_default_timezone_set('America/Lima');
 $ip_address = $_SERVER['REMOTE_ADDR'];
 
 // Configurar el tiempo de expiración de la sesión
-$tiempo_limite_sesion = 300; // 15 minutos en segundos
+$tiempo_limite_sesion = 900; // 15 minutos en segundos
 
 // Verificar si existe la variable de sesión 'ultimo_acceso'
 if (isset($_SESSION['ultimo_acceso'])) {
@@ -65,6 +65,10 @@ if (!isset($_SESSION['user_id'])) {
         }
     </script>
 </head>
+	<head>
+    <!-- Otros enlaces y metadatos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css">
+</head>
 <body>
     <header>
         <div class="header-left">
@@ -79,23 +83,40 @@ if (!isset($_SESSION['user_id'])) {
         
     </header>
     <div class="main-container">
-        <nav class="sidebar">
+       <nav class="sidebar">
+    <div class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</div>
+    <ul class="sidebar-menu">
+        <li><a href="index.php"><i class="fas fa-home"></i> Inicio</a></li>
+        <li><a href="formulario.php"><i class="fas fa-file-alt"></i> Ingresar Cédulas</a></li>
+        <li><a href="recepcionar_cedulas.php"><i class="fas fa-inbox"></i> Recepcionar Cédulas</a></li>
+        <li><a href="ver_registros.php"><i class="fas fa-folder-open"></i> Buscar Cédulas</a></li>
+        <li class="submenu"><a href="#"><i class="fas fa-tools"></i> Mantenimiento</a>
             <ul>
-                <li><a href="index.php">Ver registros</a></li>
-                <li><a href="formulario.php">Ingresar Cédulas</a></li>
-                <li><a href="recepcionar_cedulas.php">Recepcionar Cédulas</a></li>
-				<li><a href="ver_registros.php">Ver registros</a></li>
-                <li><a href="crear_usuario.php">Mantenimiento</a></li>
-				<li><a href="reportes.php">Reportes</a></li>
-				<li><a href="dashboard.php">Graficos</a></li>
-				<li><a href="dashboard2.php">Graficos2</a></li>
-				<li><a href="dashboard3.php">Graficos3</a></li>
-                <li><a href="exportar.php">Exportar</a></li>
-                <li><a href="importar.php">Importar</a></li>
+                <li><a href="crear_usuario.php"><i class="fas fa-user-plus"></i> Crear Usuario</a></li>
+                <li><a href="otro_mantenimiento.php"><i class="fas fa-wrench"></i> Otro Mantenimiento</a></li>
             </ul>
-        </nav>
+        </li>
+        <li class="submenu"><a href="#"><i class="fas fa-chart-bar"></i> Gráficos</a>
+            <ul>
+                <li><a href="dashboard.php"><i class="fas fa-chart-pie"></i> Gráficos 1</a></li>
+                <li><a href="dashboard2.php"><i class="fas fa-chart-line"></i> Gráficos 2</a></li>
+                <li><a href="dashboard3.php"><i class="fas fa-chart-area"></i> Gráficos 3</a></li>
+            </ul>
+        </li>
+        <li class="submenu"><a href="#"><i class="fas fa-file-alt"></i> Reportes</a>
+		<ul>
+                <li><a href="reportes.php"><i class="fas fa-chart-pie"></i> Reportes 1</a></li>
+                <li><a href="reportes2.php"><i class="fas fa-chart-line"></i> Reportes 2</a></li>
+                <li><a href="reportes3.php"><i class="fas fa-chart-area"></i> Reportes 3</a></li>
+            </ul>
+			
+			</li>
+        <li><a href="exportar.php"><i class="fas fa-file-export"></i> Exportar</a></li>
+        <li><a href="importar.php"><i class="fas fa-file-import"></i> Importar</a></li>
+    </ul>
+</nav>
         <div class="content">
-            <h2>Formulario de Recepción de Cédulas - Comunicaciones</h2>
+            <h2>Ingreso de Cédulas</h2>
             
             <?php
             if (isset($_SESSION['message'])) {
@@ -105,7 +126,8 @@ if (!isset($_SESSION['user_id'])) {
                 unset($_SESSION['message_type']);
             }
             ?>
-                        <form id="registro" action="procesar_formulario.php" method="POST">
+			 <div class="form-container">
+                <form id="registro" action="procesar_formulario.php" method="POST">
                 <label for="nro_cedula">Codigo Único</label>
                 <input autofocus type="number"  maxlength="20" name="nro_cedula" id="nro_cedula"  oninput="multiFunction()"  required><br><br>
 
@@ -113,7 +135,12 @@ if (!isset($_SESSION['user_id'])) {
                 <input type="hidden" name="id_usuario" id="id_usuario" value="<?php echo $_SESSION['user_id']; ?>">
 				
 				<!-- Campo oculto para busqueda por cedula -->
-				<label for="anio">Nro de Cédula</label>
+				<label for="anio">Cedula Notificacion</label>
+                <input type="text" name="notificacion" id="notificacion" readonly>	<br><br>
+				
+				
+				<!-- Campo oculto para busqueda por cedula -->
+				<label for="anio">Expediente</label>
                 <input type="text" name="cedula" id="cedula" readonly>	<br><br>			
 
 				<!-- Campo oculto para busqueda por anio -->
@@ -123,8 +150,8 @@ if (!isset($_SESSION['user_id'])) {
                 <!-- Campo oculto para Fecha de Recepción con la fecha y hora del sistema -->
                 <input type="hidden" name="fecha_recep" id="fecha_recep" value="<?php echo date('Y-m-d\TH:i'); ?>">
 				
-				  <label for="observaciones">Observaciones:</label><br>
-                <textarea name="observaciones" id="observaciones" rows="4" cols="50"></textarea><br><br>
+				  <!--  <label for="observaciones">Observaciones:</label><br>
+                <textarea name="observaciones" id="observaciones" rows="4" cols="50"></textarea><br><br> -->
 				
 					<!-- Campo oculto para ip address -->
 				  <!-- <label for="ipaddress">Ipaddress:</label><br>-->
@@ -134,6 +161,7 @@ if (!isset($_SESSION['user_id'])) {
             </form>
         </div>
     </div>
+	</div>
     
 	<script> function extraerYVisualizar() { 
 	let nro_cedula = document.getElementById('nro_cedula').value; 
@@ -157,6 +185,18 @@ if (!isset($_SESSION['user_id'])) {
 	extraeranio(); 
 	</script>
 	
+	<script> function notificacion() { 
+	let nro_cedula = document.getElementById('nro_cedula').value; 
+	let parte6 = nro_cedula.substring(5, 11); // EXTRAE(E10;16;5) 
+	let parte7 = "-"; // Reemplaza $M$237 con "-" 
+	let parte8 = nro_cedula.substring(1, 5); // EXTRAE(E10;12;4) 
+	let notificacion = parte6 + parte7 + parte8; // CONCATENAR(EXTRAE(E10;16;5))&"-"&CONCATENAR((EXTRAE(E10;12;4))) 
+	document.getElementById('notificacion').value = notificacion; 
+	} 
+	// Llamar a la función inicialmente para llenar el "notificacion" con el valor inicial de nro_cedula 
+	notificacion();  
+	</script>
+	
 		<script> function validateInput(event) {
 	const input = event.target; 
 	const value = input.value; 
@@ -175,6 +215,7 @@ if (!isset($_SESSION['user_id'])) {
     extraerYVisualizar();
     extraeranio();
 	validateInput(event);
+	notificacion();
 }
 	</script>
 	<script>
@@ -200,6 +241,7 @@ if (!isset($_SESSION['user_id'])) {
     }
 });
 </script>
+
 <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const form = document.getElementById('registro');
@@ -217,7 +259,11 @@ if (!isset($_SESSION['user_id'])) {
 	// Configurar el tiempo de expiración inicial de la sesión desde PHP 
 	const tiempoLimite = <?php echo $tiempo_limite_sesion - (time() - $_SESSION['ultimo_acceso']); ?>; actualizarTiempoRestante(tiempoLimite); } </script>
 
-
+<script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('collapsed');
+        }
+    </script>
 	<div id="error-message" style="color: red; font-weight: bold;"></div>
         <footer>
         <p>&copy; <?php echo date("Y"); ?>  Sistemas de: Recolección de Cédulas de Notificación en Periferia, Diligenciamiento de Cédulas Físicas con Descarga en Tiempo Real, y Trazabilidad de cédulas de notificación”. Todos los derechos reservados.</p>

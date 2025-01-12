@@ -7,7 +7,6 @@ $ip_address = $_SERVER['REMOTE_ADDR'];
 // Configurar el tiempo de expiración de la sesión
 $tiempo_limite_sesion = 900; // 15 minutos en segundos
 
-
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Si no está logueado, redirigir al login
@@ -68,13 +67,13 @@ if (!isset($_SESSION['user_id'])) {
         
     </header>
     <div class="main-container">
-             <nav class="sidebar">
+            <nav class="sidebar">
     <div class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</div>
     <ul class="sidebar-menu">
-        <li><a href="index.php"><i class="fas fa-home"></i> Inicio</a></li>
+        <li><a href="index.php"><i class="fas fa-home"></i> Ver registros</a></li>
         <li><a href="formulario.php"><i class="fas fa-file-alt"></i> Ingresar Cédulas</a></li>
         <li><a href="recepcionar_cedulas.php"><i class="fas fa-inbox"></i> Recepcionar Cédulas</a></li>
-        <li><a href="ver_registros.php"><i class="fas fa-folder-open"></i> Buscar Cédulas</a></li>
+        <li><a href="ver_registros.php"><i class="fas fa-folder-open"></i> Ver registros</a></li>
         <li class="submenu"><a href="#"><i class="fas fa-tools"></i> Mantenimiento</a>
             <ul>
                 <li><a href="crear_usuario.php"><i class="fas fa-user-plus"></i> Crear Usuario</a></li>
@@ -88,14 +87,7 @@ if (!isset($_SESSION['user_id'])) {
                 <li><a href="dashboard3.php"><i class="fas fa-chart-area"></i> Gráficos 3</a></li>
             </ul>
         </li>
-        <li class="submenu"><a href="#"><i class="fas fa-file-alt"></i> Reportes</a>
-		<ul>
-                <li><a href="reportes.php"><i class="fas fa-chart-pie"></i> Reportes 1</a></li>
-                <li><a href="reportes2.php"><i class="fas fa-chart-line"></i> Reportes 2</a></li>
-                <li><a href="reportes3.php"><i class="fas fa-chart-area"></i> Reportes 3</a></li>
-            </ul>
-			
-			</li>
+        <li><a href="reportes.php"><i class="fas fa-file-alt"></i> Reportes</a></li>
         <li><a href="exportar.php"><i class="fas fa-file-export"></i> Exportar</a></li>
         <li><a href="importar.php"><i class="fas fa-file-import"></i> Importar</a></li>
     </ul>
@@ -114,7 +106,7 @@ if (!isset($_SESSION['user_id'])) {
            <div class="form-container">
 		   <form id="registro" action="procesar_recepcionar.php" method="POST"> 
 		   <label for="nro_cedula">Código Único</label> 
-		   <input autofocus type="number" name="nro_cedula" id="nro_cedula" oninput="multiFunction()" required title="Solo se permiten hasta 20 caracteres numéricos"><br><br> 
+		   <input type="number" name="nro_cedula" id="nro_cedula" oninput="multiFunction()" required title="Solo se permiten hasta 20 caracteres numéricos"><br><br> 
 		   <!-- Campo oculto para ID de Usuario --> 
 		   <input type="hidden" name="id_usuario" id="id_usuario" value="<?php echo $_SESSION['user_id']; ?>"> 
 		   <!-- Campo oculto para busqueda por cedula --> 
@@ -134,31 +126,25 @@ if (!isset($_SESSION['user_id'])) {
 		   <label for="anio">Estado</label><br> 
 		   <div class="estado-seccion"> 
 			   <div class="estado-columna"> 
-					<input type="radio" id="notificado" name="estado" value="Notificado" onclick="mostrarSubtipos()"> 
+					<input type="radio" id="notificado" name="estado" value="A" onclick="mostrarSubtipos()"> 
 					<label for="notificado">Notificado (A)</label><br> 
 					<div id="subtiposA" class="subtipos"> 
-					   <input type="radio" name="subtipoA" value="Entregado con aviso - Bajo Puerta"> Entregado con aviso / Bajo Puerta<br> 
+					   <input type="radio" name="subtipoA" value="Bajo Puerta"> Bajo Puerta<br> 
 					   <input type="radio" name="subtipoA" value="Con Firma"> Con Firma<br> 
 					   <input type="radio" name="subtipoA" value="Con Sello"> Con Sello<br><br> 
 					   </div>
 					</div> 
 			   <div class="estado-columna"> 
-					<input type="radio" id="motivado" name="estado" value="Motivado" onclick="mostrarSubtipos()"> 
+					<input type="radio" id="motivado" name="estado" value="B" onclick="mostrarSubtipos()"> 
 					<label for="motivado">Motivado (B)</label><br> 
 					<div id="subtiposB" class="subtipos">
-										<input type="radio" name="subtipoB" value="Datos Errados"> Datos Errados<br> 
 					<input type="radio" name="subtipoB" value="Direccion Erronea"> Dirección Errónea<br> 
-					<input type="radio" name="subtipoB" value="Direccion Inexistente"> Dirección Inexistente<br> 
-					<input type="radio" name="subtipoB" value="Direccion Inubicable"> Dirección Inubicable<br>
-					<input type="radio" name="subtipoB" value="Faltan Datos"> Faltan Datos<br>
-					<input type="radio" name="subtipoB" value="Fuera de Jurisdiccion"> Fuera de Jurisdicción<br>
-					<input type="radio" name="subtipoB" value="Zona Peligrosa"> Zona Peligrosa<br> 
-				
-					 
+					<input type="radio" name="subtipoB" value="Ubicacion"> Ubicación<br>
+					<input type="radio" name="subtipoB" value="Zona Peligrosa"> Zona Peligrosa<br><br> 
 					</div>
 			   </div> 
 			   <div class="estado-columna"> 
-				<input type="radio" id="oficio" name="estado" value="Otros" onclick="mostrarSubtipos()">
+				<input type="radio" id="oficio" name="estado" value="C" onclick="mostrarSubtipos()">
 				<label for="oficio">Oficio (C)</label><br> 
 			   <div id="subtiposC" class="subtipos">
 			   <input type="radio" name="subtipoC" value="Perdida"> Perdida<br>
@@ -176,10 +162,9 @@ if (!isset($_SESSION['user_id'])) {
 	
 	<script> function mostrarSubtipos() { 
 	const estado = document.querySelector('input[name="estado"]:checked').value; 
-	document.getElementById('subtiposA').style.display = (estado === 'Notificado') ? 'block' : 'none'; 
-	document.getElementById('subtiposB').style.display = (estado === 'Motivado') ? 'block' : 'none'; 
-	document.getElementById('subtiposC').style.display = (estado === 'Otros') ? 'block' : 'none'; 
-	} 
+	document.getElementById('subtiposA').style.display = (estado === 'A') ? 'block' : 'none'; 
+	document.getElementById('subtiposB').style.display = (estado === 'B') ? 'block' : 'none'; 
+	document.getElementById('subtiposC').style.display = (estado === 'C') ? 'block' : 'none'; } 
 	</script>
 	
 	<script> function extraerYVisualizar() { 
@@ -261,16 +246,18 @@ if (!isset($_SESSION['user_id'])) {
     }
 });
 </script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const form = document.getElementById('registro');
-        form.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault(); // Evita que el formulario se envíe al presionar Enter
-            }
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const form = document.getElementById('registro');
+            form.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Evita el comportamiento por defecto
+                    form.submit(); // Envía el formulario
+                }
+            });
         });
-    });
-</script>
+    </script>
 	
 	<script> function actualizarTiempoRestante(tiempoLimite) {
 	const tiempoRestanteElemento = document.getElementById('tiempo-restante'); let tiempoRestante = tiempoLimite; const interval = setInterval(() => { tiempoRestante--; if (tiempoRestante <= 0) { clearInterval(interval); // Redireccionar al login si el tiempo expira window.location.href = 'login.php'; } const minutos = Math.floor(tiempoRestante / 60); const segundos = tiempoRestante % 60; tiempoRestanteElemento.textContent = `${minutos}m ${segundos}s`; }, 1000); } window.onload = () => { 

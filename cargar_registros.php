@@ -1,6 +1,7 @@
 <?php
-//archivo cargar_registros.php
+// archivo cargar_registros.php
 include_once 'conexion.php'; // Conectar a la BD
+
 // Obtener los parámetros de ordenamiento
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'id';
 $order = isset($_GET['order']) && in_array(strtolower($_GET['order']), ['asc', 'desc']) ? $_GET['order'] : 'asc';
@@ -33,7 +34,7 @@ if (!in_array($sort, $valid_columns)) {
 }
 
 // Consultar los registros que coincidan con la búsqueda y aplicar el límite, el offset y el ordenamiento
-$sql = "SELECT c.id, c.nro_cedula, u.fullname, c.cedula, c.anio, c.fecha_recep, c.observaciones 
+$sql = "SELECT c.id, c.nro_cedula, u.fullname, c.notificacion, c.cedula, c.anio, c.fecha_recep 
         FROM c_ingresos c
         JOIN usuarios u ON c.id_usuario = u.id
         WHERE c.nro_cedula LIKE ? OR u.fullname LIKE ? OR c.fecha_recep LIKE ? OR c.cedula LIKE ?
@@ -44,33 +45,64 @@ $stmt->bind_param("ssssii", $searchTerm, $searchTerm, $searchTerm, $searchTerm, 
 $stmt->execute();
 $result = $stmt->get_result();
 
+// Mostrar la tabla
+echo '<table class="table table-striped table-bordered" id="recordsTable">';
+echo '<thead>
+        <tr>
+            <th>#</th>
+            <th>Código Único</th>
+            <th>ID Usuario</th>
+            <th>Notificación</th>
+            <th>Expediente</th>
+            <th>Año</th>
+            <th>Fecha Recepción</th>
+        </tr>
+      </thead>';
+echo '<tbody>';
+
 if ($result->num_rows > 0) {
-    // Inicializar la numeración
-    $numeracion = 1 + $offset;
-    
-    // Mostrar los registros en una tabla HTML
+    $numeracion = 1 + $offset;  // Inicializar numeración
     while ($row = $result->fetch_assoc()) {
         echo "<tr>
-                <td>" . $numeracion++ . "</td> <!-- Mostrar numeración automática -->
+                <td>" . $numeracion++ . "</td>
                 <td>" . $row["nro_cedula"] . "</td>
-                <td>" . $row["fullname"] . "</td> <!-- Mostrar el nombre completo del usuario -->
+                <td>" . $row["fullname"] . "</td>
+                <td>" . $row["notificacion"] . "</td>
                 <td>" . $row["cedula"] . "</td>
                 <td>" . $row["anio"] . "</td>
                 <td>" . $row["fecha_recep"] . "</td>
-                <!-- fecha_devolucion -->
-                <td>" . $row["observaciones"] . "</td>
-                <!-- ipaddress -->
             </tr>";
     }
 } else {
     echo "<tr><td colspan='7'>No se encontraron registros.</td></tr>";
 }
+echo '</tbody>';
+echo '</table>';
 
-// Generar el paginador
-echo '<div class="pagination">';
-for ($i = 1; $i <= $total_pages; $i++) {
-    echo '<a href="#" onclick="loadPage(' . $i . ')">' . $i . '</a> ';
+// Paginación optimizada (fuera de la tabla)
+echo '<div class="pagination text-center" id="pagination">';
+
+// Botones de navegación
+if ($page > 1) {
+    echo '<a href="#" onclick="loadPage(1)">Primero</a>';
+    echo '<a href="#" onclick="loadPage(' . ($page - 1) . ')">Anterior</a>';
 }
+
+// Mostrar solo los números cercanos a la página actual
+$start_page = max(1, $page - 2);
+$end_page = min($total_pages, $page + 2);
+
+for ($i = $start_page; $i <= $end_page; $i++) {
+    $class = ($i == $page) ? 'class="active"' : '';
+    echo '<a href="#" ' . $class . ' onclick="loadPage(' . $i . ')">' . $i . '</a>';
+}
+
+// Botones de navegación
+if ($page < $total_pages) {
+    echo '<a href="#" onclick="loadPage(' . ($page + 1) . ')">Siguiente</a>';
+    echo '<a href="#" onclick="loadPage(' . $total_pages . ')">Último</a>';
+}
+
 echo '</div>';
 
 $conn->close();
