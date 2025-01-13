@@ -32,8 +32,8 @@ if ($result->num_rows > 0) {
         $_SESSION['fullname'] = $user['fullname'];
 
         // Registrar el inicio de sesión exitoso en la auditoría
-        $sql = "INSERT INTO auditoria_sesiones (usuario_id, fecha_hora, tipo_intento, ip_address, motivo_error) 
-                VALUES (?, NOW(), 'exitoso', ?, NULL)";
+        $sql = "INSERT INTO auditoria_sesiones (usuario_id, fecha_hora, tipo_intento, ip_address) 
+                VALUES (?, NOW(), 'exitoso', ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("is", $user['id'], $_SERVER['REMOTE_ADDR']);
         $stmt->execute();
@@ -46,7 +46,7 @@ if ($result->num_rows > 0) {
 
         // Registrar el intento fallido en la auditoría
         $sql = "INSERT INTO auditoria_sesiones (usuario_id, fecha_hora, tipo_intento, ip_address, motivo_error) 
-                VALUES (?, NOW(), 'fallido', ?, ?)";
+                VALUES (?, NOW(), 'fallido', ?, 'Contraseña incorrecta')";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("iss", $user['id'], $_SERVER['REMOTE_ADDR'], $_SESSION['error_message']);
         $stmt->execute();

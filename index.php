@@ -1,12 +1,21 @@
 <?php
 // archivo: index.php
 session_start();
+include_once 'conexion.php'; 
 include_once 'archivo_protegido.php'; 
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Si no está logueado, redirigir al login
     exit;
 }
+// Después de verificar el usuario y la contraseña
+//$user_privilege = get_user_privilege($_SESSION['user_id'], $conn);
+//$_SESSION['user_id'] = $usuario_id;  // El ID del usuario de la base de datos
+//header("Location: dashboard.php");  // Redirigir al dashboard
+
+$user_id = $_SESSION['user_id'];
+$user_privilege = get_user_privilege($user_id, $conn);
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -15,8 +24,6 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <link href="estilos2.css" rel="stylesheet" type="text/css">
-	
-
     <title>Sistemas de Recolección de Cédulas de Notificación</title>
 </head>
 	<head>
@@ -49,24 +56,28 @@ if (!isset($_SESSION['user_id'])) {
         </li>
         <li class="submenu"><a href="#"><i class="fas fa-chart-bar"></i> Gráficos</a>
             <ul>
+			<?php if ($user_privilege == 'admin' || $user_privilege == 'developer') : ?>
                 <li><a href="dashboard.php"><i class="fas fa-chart-pie"></i> Gráficos 1</a></li>
                 <li><a href="dashboard2.php"><i class="fas fa-chart-line"></i> Gráficos 2</a></li>
                 <li><a href="dashboard3.php"><i class="fas fa-chart-area"></i> Gráficos 3</a></li>
+				<?php endif; ?>
             </ul>
         </li>
         <li class="submenu"><a href="#"><i class="fas fa-file-alt"></i> Reportes</a>
-		<ul>
+		<ul> 	
+		<?php if ($user_privilege == 'admin' || $user_privilege == 'developer' || $user_privilege == 'usuario') : ?>
                 <li><a href="reportes.php"><i class="fas fa-chart-pie"></i> Reportes 1</a></li>
                 <li><a href="reportes2.php"><i class="fas fa-chart-line"></i> Reportes 2</a></li>
                 <li><a href="reportes3.php"><i class="fas fa-chart-area"></i> Reportes 3</a></li>
+				<?php endif; ?>
             </ul>
-			
 			</li>
+			<?php if ($user_privilege == 'admin' || $user_privilege == 'developer') : ?>
         <li><a href="exportar.php"><i class="fas fa-file-export"></i> Exportar</a></li>
         <li><a href="importar.php"><i class="fas fa-file-import"></i> Importar</a></li>
+		  <?php endif; ?>
     </ul>
 </nav>
-
         <div class="content">
             <h2>Cédulas de Notificación Físicas - Registradas</h2>
             <input type="text" id="search" placeholder="Buscar por número de cédula o ID de usuario..." onkeyup="searchRecords()">
@@ -89,10 +100,8 @@ if (!isset($_SESSION['user_id'])) {
              <div id="pagination">
                 <!-- Paginador se cargará aquí -->
             </div>
-        </div>
-		
+        </div>	
     </div>
-
     <script src="loadrecords.js"></script>
     <script>
         function toggleSidebar() {
@@ -102,6 +111,5 @@ if (!isset($_SESSION['user_id'])) {
 	   <footer>
         <p>&copy; <?php echo date("Y"); ?>  Sistemas de: Recolección de Cédulas de Notificación en Periferia, Diligenciamiento de Cédulas Físicas con Descarga en Tiempo Real, y Trazabilidad de cédulas de notificación”. Todos los derechos reservados.</p>
     </footer>
-
 </body>
 </html>
