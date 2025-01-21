@@ -146,10 +146,8 @@ if (!isset($_SESSION['user_id'])) {
 					<input type="radio" id="motivado" name="estado" value="Motivado" onclick="mostrarSubtipos()"> 
 					<label for="motivado">Motivado (B)</label><br> 
 					<div id="subtiposB" class="subtipos">
-										<input type="radio" name="subtipoB" value="Datos Errados"> Datos Errados<br> 
-					<input type="radio" name="subtipoB" value="Direccion Erronea"> Dirección Errónea<br> 
-					<input type="radio" name="subtipoB" value="Direccion Inexistente"> Dirección Inexistente<br> 
-					<input type="radio" name="subtipoB" value="Direccion Inubicable"> Dirección Inubicable<br>
+					<input type="radio" name="subtipoB" value="Datos Errados"> Datos Errados<br> 
+					<input type="radio" name="subtipoB" value="Extemporaneo"> Extemporaneo<br>
 					<input type="radio" name="subtipoB" value="Faltan Datos"> Faltan Datos<br>
 					<input type="radio" name="subtipoB" value="Fuera de Jurisdiccion"> Fuera de Jurisdicción<br>
 					<input type="radio" name="subtipoB" value="Zona Peligrosa"> Zona Peligrosa<br> 
