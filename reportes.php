@@ -16,7 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               WHERE 1=1";
 
     if ($fecha_inicio && $fecha_fin) {
-        $query .= " AND ci.fecha_recep BETWEEN '$fecha_inicio' AND '$fecha_fin'";
+        //agregando el parametro date
+        $query .= " AND DATE(ci.fecha_recep) BETWEEN '$fecha_inicio' AND '$fecha_fin'";
     }
 
     if ($estado) {

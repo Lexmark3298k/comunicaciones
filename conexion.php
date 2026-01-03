@@ -1,9 +1,9 @@
 <?php
 // Parámetros de conexión
 $servidor = "localhost";  // Dirección del servidor MySQL
-$usuario = "root";    // Nombre de usuario
-$clave = "";     // Contraseña del usuario
-$base_datos = "comunicaciones";  // Nombre de la base de datos
+$usuario = "vdsperuc_gfloresr";    // Nombre de usuario
+$clave = "Lexmark32.98k";     // Contraseña del usuario
+$base_datos = "vdsperuc_comunicaciones";  // Nombre de la base de datos
 
 // Crear la conexión
 $conn = new mysqli($servidor, $usuario, $clave, $base_datos);

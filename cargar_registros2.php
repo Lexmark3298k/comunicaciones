@@ -18,8 +18,8 @@ if (strlen($query) > 50) {
 }
 
 // Consultar el número total de registros que coincidan con la búsqueda
-$sql_count = "SELECT COUNT(*) as total FROM c_ingresos 
-WHERE nro_cedula LIKE ? OR id_usuario LIKE ? OR notificacion LIKE ? OR fecha_recep LIKE ? OR cedula LIKE ?";
+$sql_count = "SELECT COUNT(*) as total FROM c_recepcion 
+WHERE nro_cedula LIKE ? OR id_usuario LIKE ? OR notificacion LIKE ? OR fecha_devolucion LIKE ? OR cedula LIKE ?";
 $stmt_count = $conn->prepare($sql_count);
 $searchTerm = "%" . $query . "%";
 $stmt_count->bind_param("sssss", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm);
@@ -29,16 +29,16 @@ $total_records = $result_count->fetch_assoc()['total'];
 $total_pages = ceil($total_records / $limit);
 
 // Validar que la columna para ordenar sea válida
-$valid_columns = ['id', 'nro_cedula', 'fullname', 'notificacion', 'cedula', 'anio', 'fecha_recep'];
+$valid_columns = ['id', 'nro_cedula', 'fullname', 'notificacion', 'cedula', 'anio', 'fecha_devolucion'];
 if (!in_array($sort, $valid_columns)) {
     $sort = 'id'; // Valor por defecto
 }
 
 // Consultar los registros que coincidan con la búsqueda y aplicar el límite, el offset y el ordenamiento
-$sql = "SELECT c.id, c.nro_cedula, u.fullname, c.notificacion, c.cedula, c.anio, c.fecha_recep 
-        FROM c_ingresos c
+$sql = "SELECT c.id, c.nro_cedula, u.fullname, c.notificacion, c.cedula, c.anio, c.fecha_devolucion 
+        FROM c_recepcion c
         JOIN usuarios u ON c.id_usuario = u.id
-        WHERE c.nro_cedula LIKE ? OR c.notificacion LIKE ? OR u.fullname LIKE ? OR c.fecha_recep LIKE ? OR c.cedula LIKE ?
+        WHERE c.nro_cedula LIKE ? OR c.notificacion LIKE ? OR u.fullname LIKE ? OR c.fecha_devolucion LIKE ? OR c.cedula LIKE ?
         ORDER BY $sort $order
         LIMIT ? OFFSET ?";
 $stmt = $conn->prepare($sql);
@@ -53,10 +53,10 @@ echo '<thead>
             <th>#</th>
             <th>Código Único</th>
             <th>Usuario</th>
-            <th>Cedula de Notificación</th>
-            <th>Numero de Expediente</th>
-            <th>Año Expediente</th>
-            <th>Fecha de Registro</th>
+            <th>Cédula de Notificación</th>
+            <th>Número de Expediente</th>
+            <th>Año de Expediente</th>
+            <th>Fecha Devolución</th>
         </tr>
       </thead>';
 echo '<tbody>';
@@ -71,7 +71,7 @@ if ($result->num_rows > 0) {
                 <td>" . $row["notificacion"] . "</td>
                 <td>" . $row["cedula"] . "</td>
                 <td>" . $row["anio"] . "</td>
-                <td>" . $row["fecha_recep"] . "</td>
+                <td>" . $row["fecha_devolucion"] . "</td>
             </tr>";
     }
 } else {

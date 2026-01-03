@@ -5,7 +5,7 @@ date_default_timezone_set('America/Lima');
 $ip_address = $_SERVER['REMOTE_ADDR'];
 
 // Configurar el tiempo de expiración de la sesión
-$tiempo_limite_sesion = 900; // 15 minutos en segundos
+$tiempo_limite_sesion = 1500; // 15 minutos en segundos
 
 // Verificar si existe la variable de sesión 'ultimo_acceso'
 if (isset($_SESSION['ultimo_acceso'])) {
@@ -37,7 +37,7 @@ if (!isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="estilos.css" rel="stylesheet" type="text/css">
-    <title>Recepción de Cédulas</title>
+    <title>Ingresar Cédulas - Sede Judicial</title>
     <script>
         function actualizarTiempoRestante(tiempoLimite) {
             const tiempoRestanteElemento = document.getElementById('tiempo-restante');
@@ -87,9 +87,11 @@ if (!isset($_SESSION['user_id'])) {
     <div class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</div>
     <ul class="sidebar-menu">
         <li><a href="index.php"><i class="fas fa-home"></i> Inicio</a></li>
-        <li><a href="formulario.php"><i class="fas fa-file-alt"></i> Ingresar Cédulas</a></li>
-        <li><a href="recepcionar_cedulas.php"><i class="fas fa-inbox"></i> Recepcionar Cédulas</a></li>
-        <li><a href="ver_registros.php"><i class="fas fa-folder-open"></i> Buscar Cédulas</a></li>
+        <li><a href="formulario.php"><i class="fas fa-file-alt"></i> Ingresar Cédulas - Sede</a></li>
+        <li><a href="recepcionar_cedulas.php"><i class="fas fa-inbox"></i> Recepcionar Cédulas Devueltas - SUN</a></li>
+               <li><a href="ver_registros.php"><i class="fas fa-folder-open"></i> Buscar Cédulas Registradas</a></li>
+        <li><a href="ver_registros2.php"><i class="fas fa-folder-open"></i> Buscar Cédulas Devueltas - SUN</a></li>
+
         <li class="submenu"><a href="#"><i class="fas fa-tools"></i> Mantenimiento</a>
             <ul>
                 <li><a href="crear_usuario.php"><i class="fas fa-user-plus"></i> Crear Usuario</a></li>
@@ -116,7 +118,7 @@ if (!isset($_SESSION['user_id'])) {
     </ul>
 </nav>
         <div class="content">
-            <h2>Ingreso de Cédulas</h2>
+            <h2>Ingresar de Cédulas - Sede</h2>
             
             <?php
             if (isset($_SESSION['message'])) {
@@ -135,7 +137,7 @@ if (!isset($_SESSION['user_id'])) {
                 <input type="hidden" name="id_usuario" id="id_usuario" value="<?php echo $_SESSION['user_id']; ?>">
 				
 				<!-- Campo oculto para busqueda por cedula -->
-				<label for="anio">Cedula Notificacion</label>
+				<label for="anio">Cédula Notificación</label>
                 <input type="text" name="notificacion" id="notificacion" readonly>	<br><br>
 				
 				
@@ -264,6 +266,18 @@ if (!isset($_SESSION['user_id'])) {
             document.querySelector('.sidebar').classList.toggle('collapsed');
         }
     </script>
+    
+    <script>
+    document.getElementById('registro').addEventListener('submit', function(event) {
+        const nroCedula = document.getElementById('nro_cedula').value;
+        
+        if (nroCedula.length !== 20) {
+            event.preventDefault(); // Evita el envío del formulario
+            alert("El número de cédula debe contener exactamente 20 dígitos."); // Mensaje emergente
+        }
+    });
+</script>
+
 	<div id="error-message" style="color: red; font-weight: bold;"></div>
         <footer>
         <p>&copy; <?php echo date("Y"); ?>  Sistemas de: Recolección de Cédulas de Notificación en Periferia, Diligenciamiento de Cédulas Físicas con Descarga en Tiempo Real, y Trazabilidad de cédulas de notificación”. Todos los derechos reservados.</p>

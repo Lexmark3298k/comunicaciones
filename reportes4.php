@@ -8,24 +8,23 @@ $fecha_fin = isset($_GET['fecha_fin']) ? $_GET['fecha_fin'] : '';
 
 // Consulta consolidada basada en los parámetros
 $query = "SELECT 
-            c_ingresos.nro_cedula, 
-            c_ingresos.fecha_recep, 
+            c_recepcion.nro_cedula, 
             c_recepcion.fecha_devolucion, 
-            c_recepcion.estado, 
+            c_recepcion.notificacion, 
+			c_recepcion.estado, 
             usuarios.fullname 
           FROM 
-            c_ingresos 
-          LEFT JOIN 
-            c_recepcion ON c_ingresos.nro_cedula = c_recepcion.nro_cedula 
-          LEFT JOIN 
-            usuarios ON c_ingresos.id_usuario = usuarios.id 
+            c_recepcion 
+         
+           JOIN 
+            usuarios ON c_recepcion.id_usuario = usuarios.id 
           WHERE 1=1";
 
 if ($estado) {
     $query .= " AND c_recepcion.estado = '$estado'";
 }
 if ($fecha_inicio && $fecha_fin) {
-    $query .= " AND DATE(c_ingresos.fecha_recep) BETWEEN '$fecha_inicio' AND '$fecha_fin'";
+    $query .= " AND DATE(c_recepcion.fecha_devolucion) BETWEEN '$fecha_inicio' AND '$fecha_fin'";
 }
 
 $result = $conn->query($query);
@@ -33,7 +32,7 @@ $registros = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -142,7 +141,7 @@ $registros = $result->fetch_all(MYSQLI_ASSOC);
     <h1>Consolidado de Reportes</h1>
 
     <!-- Filtros para navegación -->
-    <form method="GET" action="reportes2.php">
+    <form method="GET" action="reportes4.php">
         <label for="estado">Estado:</label>
         <select name="estado" id="estado">
             <option value="">Todos</option>
@@ -175,7 +174,8 @@ $registros = $result->fetch_all(MYSQLI_ASSOC);
                 <?php foreach ($registros as $registro): ?>
                     <tr>
                         <td><?= $registro['nro_cedula'] ?></td>
-                        <td><?= $registro['fecha_recep'] ?></td>
+						   <td><?= $registro['notificacion'] ?></td>
+                       
                         <td><?= $registro['fecha_devolucion'] ?? 'Sin Devolución' ?></td>
                         <td><?= $registro['estado'] ?></td>
                         <td><?= $registro['fullname'] ?></td>

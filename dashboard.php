@@ -121,14 +121,14 @@ $json_anios = json_encode($data_anios);
 	 <div class="content">
     <h1>Dashboard de Cedulas</h1>
     <div class="container">
-        <!-- Fila 1 -->
+        <!-- Fila 1
         <div class="row">
             <section class="col">
                 <h2>Estadísticas Generales</h2>
                 <p>Total de Registros: <strong><?php echo $total_registros; ?></strong></p>
                 <p>Promedio de Cedulas por Usuario: <strong><?php echo number_format($promedio, 2); ?></strong></p>
             </section>
-
+<!-- 
             <section class="col">
                 <h2>Registros por Usuario</h2>
                 <ul>
@@ -137,6 +137,7 @@ $json_anios = json_encode($data_anios);
                     <?php endwhile; ?>
                 </ul>
             </section>
+			 -->
         </div>
 
         <!-- Fila 2 -->

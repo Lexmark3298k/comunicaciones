@@ -1,11 +1,13 @@
 <?php
 // archivo: formulario.php
 session_start();
+include_once 'conexion.php'; 
+include_once 'archivo_protegido.php';
 date_default_timezone_set('America/Lima');
 $ip_address = $_SERVER['REMOTE_ADDR'];
 
 // Configurar el tiempo de expiración de la sesión
-$tiempo_limite_sesion = 900; // 15 minutos en segundos
+$tiempo_limite_sesion = 1500; // 15 minutos en segundos
 
 
 // Verificar si el usuario está logueado
@@ -13,6 +15,11 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Si no está logueado, redirigir al login
     exit;
 }
+//ajustar privilegios
+$user_id = $_SESSION['user_id'];
+$user_privilege = get_user_privilege($user_id, $conn);
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -70,11 +77,14 @@ if (!isset($_SESSION['user_id'])) {
     <div class="main-container">
              <nav class="sidebar">
     <div class="sidebar-toggle" onclick="toggleSidebar()">&#9776;</div>
-    <ul class="sidebar-menu">
+     <ul class="sidebar-menu">
         <li><a href="index.php"><i class="fas fa-home"></i> Inicio</a></li>
-        <li><a href="formulario.php"><i class="fas fa-file-alt"></i> Ingresar Cédulas</a></li>
-        <li><a href="recepcionar_cedulas.php"><i class="fas fa-inbox"></i> Recepcionar Cédulas</a></li>
-        <li><a href="ver_registros.php"><i class="fas fa-folder-open"></i> Buscar Cédulas</a></li>
+        <li><a href="formulario.php"><i class="fas fa-file-alt"></i> Ingresar Cédulas - Sede</a></li>
+        <li><a href="recepcionar_cedulas.php"><i class="fas fa-inbox"></i> Recepcionar Cédulas Devueltas - SUN</a></li>
+               <li><a href="ver_registros.php"><i class="fas fa-folder-open"></i> Buscar Cédulas Registradas</a></li>
+        <li><a href="ver_registros2.php"><i class="fas fa-folder-open"></i> Buscar Cédulas Devueltas - SUN</a></li>
+
+        
         <li class="submenu"><a href="#"><i class="fas fa-tools"></i> Mantenimiento</a>
             <ul>
                 <li><a href="crear_usuario.php"><i class="fas fa-user-plus"></i> Crear Usuario</a></li>
@@ -83,21 +93,26 @@ if (!isset($_SESSION['user_id'])) {
         </li>
         <li class="submenu"><a href="#"><i class="fas fa-chart-bar"></i> Gráficos</a>
             <ul>
+			<?php if ($user_privilege == 'admin' || $user_privilege == 'developer') : ?>
                 <li><a href="dashboard.php"><i class="fas fa-chart-pie"></i> Gráficos 1</a></li>
                 <li><a href="dashboard2.php"><i class="fas fa-chart-line"></i> Gráficos 2</a></li>
                 <li><a href="dashboard3.php"><i class="fas fa-chart-area"></i> Gráficos 3</a></li>
+				<?php endif; ?>
             </ul>
         </li>
         <li class="submenu"><a href="#"><i class="fas fa-file-alt"></i> Reportes</a>
-		<ul>
+		<ul> 	
+		<?php if ($user_privilege == 'admin' || $user_privilege == 'developer' || $user_privilege == 'usuario') : ?>
                 <li><a href="reportes.php"><i class="fas fa-chart-pie"></i> Reportes 1</a></li>
                 <li><a href="reportes2.php"><i class="fas fa-chart-line"></i> Reportes 2</a></li>
                 <li><a href="reportes3.php"><i class="fas fa-chart-area"></i> Reportes 3</a></li>
+				<?php endif; ?>
             </ul>
-			
 			</li>
+			<?php if ($user_privilege == 'admin' || $user_privilege == 'developer') : ?>
         <li><a href="exportar.php"><i class="fas fa-file-export"></i> Exportar</a></li>
         <li><a href="importar.php"><i class="fas fa-file-import"></i> Importar</a></li>
+		  <?php endif; ?>
     </ul>
 </nav>
         <div class="content">
@@ -274,6 +289,17 @@ if (!isset($_SESSION['user_id'])) {
 	const tiempoRestanteElemento = document.getElementById('tiempo-restante'); let tiempoRestante = tiempoLimite; const interval = setInterval(() => { tiempoRestante--; if (tiempoRestante <= 0) { clearInterval(interval); // Redireccionar al login si el tiempo expira window.location.href = 'login.php'; } const minutos = Math.floor(tiempoRestante / 60); const segundos = tiempoRestante % 60; tiempoRestanteElemento.textContent = `${minutos}m ${segundos}s`; }, 1000); } window.onload = () => { 
 	// Configurar el tiempo de expiración inicial de la sesión desde PHP 
 	const tiempoLimite = <?php echo $tiempo_limite_sesion - (time() - $_SESSION['ultimo_acceso']); ?>; actualizarTiempoRestante(tiempoLimite); } </script>
+	
+	    <script>
+    document.getElementById('registro').addEventListener('submit', function(event) {
+        const nroCedula = document.getElementById('nro_cedula').value;
+        
+        if (nroCedula.length !== 20) {
+            event.preventDefault(); // Evita el envío del formulario
+            alert("El número de cédula debe contener exactamente 20 dígitos."); // Mensaje emergente
+        }
+    });
+</script>
 	
 	<script>
         function toggleSidebar() {
